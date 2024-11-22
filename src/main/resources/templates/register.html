@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
+<head>
+	<meta charset="UTF-8">
+	<title>Register</title>
+</head>
+<body>
+<section>
+	<div class="container-fluid p-0">
+		<div class="row g-0">
+			<div class="col-md-6 d-none d-md-block">
+				<div class="login-banner h-100 d-flex align-items-center justify-content-center" style="background-color: #fff1ee;">
+					<img src="img/ecom.png" alt="register banner" class="img-fluid" style="max-width: 80%;">
+				</div>
+			</div>
+			<div class="col-md-6 bg-white">
+				<div class="login-form-wrapper p-4 p-md-5">
+					<div class="text-center mb-4">
+						<h2 class="fw-bold" style="color: #f94f2f;">Create Account</h2>
+						<p class="text-muted">Please fill in the form to register</p>
+					</div>
+
+					<!-- Success Message -->
+					<div th:if="${session.succMsg}" class="alert alert-success text-center">
+						[[${session.succMsg}]]
+						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+					</div>
+
+					<!-- Error Message -->
+					<div th:if="${session.errorMsg}" class="alert alert-danger text-center">
+						[[${session.errorMsg}]]
+						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+					</div>
+
+					<form action="/saveUser" method="post" enctype="multipart/form-data" id="userRegister" novalidate>
+						<div class="row mb-4">
+							<div class="col-md-6">
+								<label class="form-label">Full Name</label>
+								<input required type="text" name="name" class="form-control form-control-lg" style="border-radius: 10px; border: 1px solid #ced4da;">
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">Mobile Number</label>
+								<input required type="number" name="mobileNumber" class="form-control form-control-lg" style="border-radius: 10px; border: 1px solid #ced4da;">
+							</div>
+						</div>
+
+						<div class="mb-4">
+							<label class="form-label">Email</label>
+							<input required type="email" name="email" class="form-control form-control-lg" style="border-radius: 10px; border: 1px solid #ced4da;">
+						</div>
+
+						<div class="row mb-4">
+							<div class="col-md-6">
+								<label class="form-label">Address</label>
+								<input required type="text" name="address" class="form-control form-control-lg" style="border-radius: 10px; border: 1px solid #ced4da;">
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">City</label>
+								<input required type="text" name="city" class="form-control form-control-lg" style="border-radius: 10px; border: 1px solid #ced4da;">
+							</div>
+						</div>
+
+						<div class="row mb-4">
+							<div class="col-md-6">
+								<label class="form-label">State</label>
+								<input required type="text" name="state" class="form-control form-control-lg" style="border-radius: 10px; border: 1px solid #ced4da;">
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">Pincode</label>
+								<input required type="number" name="pincode" class="form-control form-control-lg" style="border-radius: 10px; border: 1px solid #ced4da;">
+							</div>
+						</div>
+
+						<div class="row mb-4">
+							<div class="col-md-6">
+								<label class="form-label">Password</label>
+								<input required type="password" name="password" id="pass" class="form-control form-control-lg" style="border-radius: 10px; border: 1px solid #ced4da;">
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">Confirm Password</label>
+								<input required type="password" name="confirmpassword" class="form-control form-control-lg" style="border-radius: 10px; border: 1px solid #ced4da;">
+							</div>
+						</div>
+
+						<div class="mb-4">
+							<label class="form-label">Profile Image</label>
+							<input type="file" name="img" class="form-control form-control-lg" style="border-radius: 10px; border: 1px solid #ced4da;">
+						</div>
+
+						<button type="submit" class="btn btn-lg w-100 mb-4" style="background-color: #f94f2f; color: white; border-radius: 10px;">
+							Register
+						</button>
+					</form>
+
+					<div class="text-center">
+						<p class="mb-0">Already have an account?
+							<a href="/signin" class="text-decoration-none" style="color: #f94f2f;">Login</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<style>
+		.login-form-wrapper {
+			max-width: 500px;
+			margin: 0 auto;
+			margin-top: 70px;
+			margin-bottom: 0px;
+		}
+
+		.form-control:focus {
+			border-color: #f94f2f;
+			box-shadow: 0 0 0 0.25rem rgba(249, 79, 47, 0.25);
+		}
+
+		.btn:hover {
+			opacity: 0.9;
+		}
+
+		@media (max-width: 768px) {
+			.login-form-wrapper {
+				max-width: 100%;
+			}
+		}
+	</style>
+</section>
+</body>
+</html>

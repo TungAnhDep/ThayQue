@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<section>
+		<div class="container-fluid p-5 mt-5">
+			<div class="row">
+				<div class="col-md-3 offset-md-5">
+					<div class="card card-sh">
+						<div class="card-header text-center ">
+							<p class="fs-4">Edit Category</p>
+							<th:block th:if="${session.succMsg}">
+								<p class="text-success fw-bold">[[${session.succMsg}]]</p>
+								<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+							</th:block>
+
+							<th:block th:if="${session.errorMsg}">
+								<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+								<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+							</th:block>
+
+						</div>
+						<div class="card-body">
+							<form action="/admin/updateCategory" method="post"
+								enctype="multipart/form-data">
+								<input type="hidden" name="id" th:value="${category.id}">
+								<div class="mb-3">
+									<label>Enter Category</label> <input type="text" name="name"
+										th:value="${category.name}" class="form-control">
+								</div>
+
+								<div class="mb-3">
+									<label>Status</label>
+
+									<div class="form-check">
+										<input class="form-check-input" type="radio"
+											th:checked="${category.isActive==true}" value="true"
+											name="isActive" id="flexRadioDefault1"> <label
+											class="form-check-label" for="flexRadioDefault1">
+											Active </label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="isActive"
+											th:checked="${category.isActive==false}" value="false"
+											id="flexRadioDefault2"> <label
+											class="form-check-label" for="flexRadioDefault2">
+											Inactive </label>
+									</div>
+
+								</div>
+
+								<div class="mb-3">
+									<label>Upload Image</label> <input type="file" name="file"
+										class="form-control">
+								</div>
+								<img th:src="@{'/img/category_img/'+${category.imageName}}"
+									width="100px" height="100px">
+								<button class="btn btn-primary col-md-12 mt-2">Update</button>
+							</form>
+						</div>
+					</div>
+				</div>
+
+
+
+			</div>
+		</div>
+		<style>
+
+            .card-header {
+                background-color: #f94f2f;
+                color: white;
+                            font-weight: bold;
+
+            }
+
+            .card-body {
+                background-color: #f9f9f9;
+            }
+
+            .btn-primary {
+                background-color: #f94f2f;
+                border-color: #f94f2f;
+                padding: 0.75rem 1.5rem; /* Gi? kích th??c nút không thay ??i */
+            }
+
+            .btn-primary:hover {
+                background-color: #e83f28;
+                border-color: #e83f28;
+            }
+
+            .form-check-input:checked {
+                background-color: #f94f2f;
+                border-color: #f94f2f;
+            }
+
+            .form-check-input:hover {
+                border-color: #f94f2f;
+            }
+
+            .form-check-input:checked + .form-check-label {
+                color: #f94f2f;
+            }
+
+            label {
+                font-weight: bold;
+            }
+
+            .fs-4 {
+                font-size: 1.5rem;
+            }
+
+
+
+            .form-control:focus {
+                border-color: #f94f2f;
+                box-shadow: 0 0 0 0.2rem rgba(249, 79, 47, 0.25);
+            }
+
+            .card-sh {
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+            }
+
+
+
+
+
+            img {
+                margin-top: 10px;
+                border-radius: 8px;
+                  display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 20px
+            }
+
+
+            </style>
+        </section>
+    </body>
+    </html>

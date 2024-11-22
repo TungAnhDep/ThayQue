@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Insert title here</title>
+</head>
+<body>
+<section>
+	<div class="container-fluid p-5 mt-5">
+		<div class="row">
+			<div class="col-md-3">
+				<div class="card card-sh">
+					<div class="card-header text-center">
+						<p class="fs-4">Add Category</p>
+						<th:block th:if="${session.succMsg}">
+							<p class="text-success fw-bold">[[${session.succMsg}]]</p>
+							<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+						</th:block>
+
+						<th:block th:if="${session.errorMsg}">
+							<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+							<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+						</th:block>
+					</div>
+					<div class="card-body">
+						<form action="/admin/saveCategory" method="post" enctype="multipart/form-data">
+							<div class="mb-3">
+								<label>Enter Category</label>
+								<input type="text" name="name" class="form-control">
+							</div>
+
+							<div class="mb-3">
+								<label>Status</label>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" checked value="true" name="isActive" id="flexRadioDefault1">
+									<label class="form-check-label" for="flexRadioDefault1">Active</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="isActive" value="false" id="flexRadioDefault2">
+									<label class="form-check-label" for="flexRadioDefault2">Inactive</label>
+								</div>
+							</div>
+
+							<div class="mb-3">
+								<label>Upload Image</label>
+								<input type="file" name="file" class="form-control">
+							</div>
+							<button class="btn btn-primary col-md-12 mt-2">Save</button>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-8">
+				<div class="card card-sh">
+					<div class="card-header text-center fs-4">Category Details</div>
+					<div class="card-body">
+						<table class="table">
+							<thead>
+							<tr>
+								<th scope="col">Sl No</th>
+								<th scope="col">Category</th>
+								<th scope="col">Status</th>
+								<th scope="col">Image</th>
+								<th scope="col">Action</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr th:each="cat,c:${categorys}">
+								<th scope="row">[[${c.count}]]</th>
+								<td>[[${cat.name}]]</td>
+								<td>[[${cat.isActive}]]</td>
+								<td>
+									<img th:src="@{'/img/category_img/'+${cat.imageName}}" width="50px" height="50px">
+								</td>
+								<td>
+									<!-- Both Edit and Delete buttons now have the same size -->
+									<a th:href="@{'/admin/loadEditCategory/'+${cat.id}}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pen-to-square  fa-1x"></i> Edit</a>
+									<a th:href="@{'/admin/deleteCategory/'+${cat.id}}" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash  fa-1x"></i>Delete</a>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+
+						<div class="row">
+							<div class="col-md-4">Total Category: [[${totalElements}]]</div>
+							<div class="col-md-6">
+								<nav aria-label="Page navigation example">
+									<ul class="pagination">
+										<li class="page-item" th:classappend="${isFirst} ? 'disabled':''">
+											<a class="page-link" th:href="@{'/admin/category?pageNo='+${pageNo-1}}" aria-label="Previous">
+												<span aria-hidden="true">&laquo;</span>
+											</a>
+										</li>
+
+										<li th:each="i:${#numbers.sequence(1,totalPages)}" class="page-item" th:classappend="${pageNo+1==i}?'active':''">
+											<a class="page-link" th:href="@{'/admin/category?pageNo='+${i-1}}">[[${i}]]</a>
+										</li>
+
+										<li class="page-item" th:classappend="${isLast} ? 'disabled':''">
+											<a class="page-link" th:href="@{'/admin/category?pageNo='+${pageNo+1}}" aria-label="Next">
+												<span aria-hidden="true">&raquo;</span>
+											</a>
+										</li>
+									</ul>
+								</nav>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<style>
+		body {
+            background-color: #fef9f7;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            height: 100%;
+        }
+
+        .card-header {
+            background-color: #f94f2f;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .card-header p, .card-header .fs-4 {
+            color: #fff;
+        }
+
+        .btn-primary {
+            background-color: #f94f2f;
+            border: none;
+            font-weight: bold;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #d53d26;
+        }
+
+        .form-control {
+            border-radius: 8px;
+        }
+
+        .table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+            table-layout: fixed; /* Gi?i h?n chi?u r?ng c?a b?ng */
+            overflow: hidden;
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: left;
+            vertical-align: middle;
+            word-wrap: break-word; /* Chia t? n?u c?n */
+        }
+
+        .table th {
+            font-weight: bold;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f1f1f1;
+        }
+
+        .table tbody tr:hover {
+            background-color: #ddd;
+        }
+
+        .pagination {
+            justify-content: center; /* C?n gi?a các nút phân trang */
+        }
+
+        .page-item.active .page-link {
+            background-color: #f94f2f;
+            border-color: #f94f2f;
+        }
+
+       .pagination {
+            justify-content: center;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            background-color: #f5f5f5;
+            border-color: #ddd;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #f94f2f;
+            border-color: #f94f2f;
+            color: white;
+        }
+
+
+        .card-sh {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-center p {
+            font-size: 1.25rem;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .btn-sm {
+            font-weight: bold;
+        }
+		.form-check-input:checked {
+    background-color: #f94f2f;
+    border-color: #f94f2f;
+}
+
+/* Thay ??i màu khi hover vào radio button */
+.form-check-input:hover {
+    border-color: #f94f2f;
+}
+
+/* Thay ??i màu c?a label khi radio ???c ch?n */
+.form-check-input:checked + .form-check-label {
+    color: #f94f2f;
+}
+        </style
+		>
+    </section>
+    </body>
+    </html>

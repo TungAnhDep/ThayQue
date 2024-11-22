@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<section>
+		<div class="container-fluid mt-4 p-3">
+			<div class="row">
+				<p class="text-center fs-3 mt-2">All Products</p>
+				<hr>
+				<a href="/admin/" class="text-decoration-none"><i
+					class="fa-solid fa-arrow-left"></i> Back</a>
+				<th:block th:if="${session.succMsg}">
+					<p class="text-success fw-bold">[[${session.succMsg}]]</p>
+					<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+				</th:block>
+
+				<th:block th:if="${session.errorMsg}">
+					<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+					<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+				</th:block>
+
+				<th:block th:if="${session.errorMsg}">
+					<p class="text-danger fw-bold text-center">[[${session.errorMsg}]]</p>
+					<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+				</th:block>
+				<div class="col-md-4 p-3">
+
+					<form action="/admin/products" method="get">
+						<div class="row">
+							<div class="col">
+								<input type="text" class="form-control " name="ch">
+							</div>
+							<div class="col">
+								<button class="btn btn-primary col">Search</button>
+							</div>
+						</div>
+					</form>
+
+				</div>
+
+
+				<!-- <div class="card card-sh">-->
+				<div class="p-3">
+					<table class="table table-bordered">
+						<thead class="table-light ">
+							<tr>
+								<th scope="col">Sl No</th>
+								<th scope="col">Image</th>
+								<th scope="col">Title</th>
+								<th scope="col">Category</th>
+								<th scope="col">Price</th>
+								<th scope="col">Discount</th>
+								<th scope="col">Discount Price</th>
+								<th scope="col">Status</th>
+								<th scope="col">Stock</th>
+								<th scope="col">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="p,c:${products}">
+								<th scope="row">[[${c.count}]]</th>
+								<td><img th:src="@{'/img/product_img/'+${p.image}}"
+									width="70px" height="70px"></td>
+								<td>[[${p.title}]]</td>
+								<td>[[${p.category}]]</td>
+								<td>[[${(p.price)}]]₫</td>
+								<td>[[${p.discount}]]%</td>
+								<td>[[${p.discountPrice}]]đ</td>
+								<td>[[${p.isActive}]]</td>
+								<td>[[${p.stock}]]</td>
+								<td><a th:href="@{'/admin/editProduct/'+${p.id}}"
+									class="btn btn-sm btn-primary"><i
+										class="fa-solid fa-pen-to-square"></i>Edit</a> <a
+									th:href="@{'/admin/deleteProduct/'+${p.id}}"
+									class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i>
+										Delete</a></td>
+							</tr>
+
+						</tbody>
+					</table>
+
+					<div class="row">
+						<div class="col-md-4">Total Product : [[${totalElements}]]</div>
+						<div class="col-md-6">
+
+							<nav aria-label="Page navigation example">
+								<ul class="pagination">
+									<li class="page-item"
+										th:classappend="${isFirst} ? 'disabled':''"><a
+										class="page-link"
+										th:href="@{'/admin/products?pageNo='+${pageNo-1}}"
+										aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+									</a></li>
+
+									<li th:each="i:${#numbers.sequence(1,totalPages)}"
+										class="page-item" th:classappend="${pageNo+1==i}?'active':''"
+										]]><a class="page-link"
+										th:href="@{'/admin/products?pageNo='+${i-1}}">[[${i}]]</a></li>
+
+									<li class="page-item"
+										th:classappend="${isLast} ? 'disabled':''"><a
+										class="page-link"
+										th:href="@{'/admin/products?pageNo='+${pageNo+1}}"
+										aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+									</a></li>
+								</ul>
+							</nav>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 	</div> -->
+		<style>
+			/* Màu s?c ch? ??o cho các nút */
+            .btn-primary {
+                background-color: #f94f2f;
+                border-color: #f94f2f;
+            }
+
+            .btn-primary:hover {
+                background-color: #e83f28;
+                border-color: #e83f28;
+            }
+
+            .btn-danger {
+                background-color: #dc3545;
+                border-color: #dc3545;
+            }
+
+            .btn-danger:hover {
+                background-color: #c82333;
+                border-color: #c82333;
+            }
+
+            /* ?i?u ch?nh màu c?a các liên k?t */
+            .text-decoration-none {
+                color: #f94f2f;
+            }
+
+            .text-decoration-none:hover {
+                color: #e83f28;
+            }
+
+            /* ?i?u ch?nh màu n?n và vi?n cho các ô nh?p li?u */
+            .form-control {
+                border-radius: 0.25rem;
+                border: 1px solid #ddd;
+            }
+
+            .form-control:focus {
+                border-color: #f94f2f;
+                box-shadow: 0 0 0 0.2rem rgba(249, 79, 47, 0.25);
+            }
+            .pagination {
+    display: flex;
+    justify-content: center; /* C?n gi?a các ph?n t? */
+    align-items: center;     /* C?n các ph?n t? theo chi?u d?c */
+    margin-top: 20px;        /* Thêm kho?ng cách trên */
+}
+			.pagination .page-link {
+			color: #f94f2f;
+		}
+
+		.pagination .active .page-link {
+			background-color: #f94f2f;
+			border-color: #f94f2f;
+			color: white;
+		}
+
+
+
+		</style>
+	</section>
+</body>
+</html>
